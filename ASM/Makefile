@@ -1,4 +1,6 @@
-FLAG= -Wall -Werror -Wall
+FLAGS =  -Wall -Wextra -Werror
+NASMFLAGS = -f macho64
+NASM = /usr/local/bin/nasm
 
 COLLEEN_S = Colleen.s
 GRACE_S = Grace.s
@@ -11,16 +13,16 @@ SULLY_O = $(SULLY_S:.s=.o)
 all: Colleen Grace Sully
 
 Colleen: $(COLLEEN_O)
-	@nasm -f macho64 COLLEEN_S
 	@gcc $(COLLEEN_O) -o Colleen
 
 Grace: $(GRACE_O)
-	@nasm -f macho64 GRACE_S
 	@gcc $(GRACE_O) -o Grace
 
 Sully: $(SULLY_O)
-	@nasm -f macho64 SULLY_S
 	@gcc $(SULLY_O) -o Sully
+
+%.o: %.s
+	$(NASM) $(NASMFLAGS) -o $@ $<
 
 clean:
 	@/bin/rm -rf $(SULLY_O) $(GRACE_O) $(COLLEEN_O)
